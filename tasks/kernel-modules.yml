@@ -1,0 +1,23 @@
+# TODO support other host system. Currently assumes on Proxmox VE.
+- name: install package on wireguard host
+  apt:
+    name:
+      - pve-headers
+      - wireguard-dkms
+    state: present
+  when: "router_os_distribution in ('pve')"
+
+- name: Load wireguard module
+  modprobe:
+    name: wireguard
+    state: present
+
+- name: Ensure wireguard module is loaded on boot
+  lineinfile:
+    path: /etc/modules-load.d/modules.conf
+    regexp: '^wireguard'
+    line: 'wireguard'
+    create: yes
+    owner: root
+    group: root
+    mode: '0644'
