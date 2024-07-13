@@ -1,0 +1,12 @@
+[Interface]
+Address = {{ item.value['address'] }}
+PrivateKey = {{ item.value['private_key'] }}
+ListenPort = {{ item.value['port'] }}
+
+{% for name, conf in item.value["peers"].items() %}
+# {{ name }}
+[Peer]
+PublicKey = {{ conf['pubkey'] }}
+AllowedIPs = {{ conf['allowed_ips'] | join(', ') }}
+
+{% endfor %}

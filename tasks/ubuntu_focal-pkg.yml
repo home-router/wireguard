@@ -1,0 +1,4 @@
+- name: install wireguard on Ubuntu
+  apt:
+      name: wireguard-tools
+      state: present

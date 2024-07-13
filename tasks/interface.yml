@@ -1,0 +1,13 @@
+- name: generate config for interface {{ item.key }}
+  template: src=etc/wireguard/interface.conf.j2 dest=/etc/wireguard/{{ item.key }}.conf
+  register: wireguard_conf
+  tags:
+    - config
+
+- name: enable wireguard {{ item.key }} service
+  systemd: name=wg-quick@{{ item.key }} enabled=true
+
+- name: restart wireguard {{ item.key }} service
+  systemd: name=wg-quick@{{ item.key }} state=restarted
+  when: wireguard_conf.changed
+

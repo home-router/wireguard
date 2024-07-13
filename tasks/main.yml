@@ -1,0 +1,15 @@
+- name: install package on system
+  include: "{{ router_os_distribution }}-pkg.yml"
+
+- name: generate wireguard config
+  include_tasks: interface.yml
+  loop: "{{ wireguard_interfaces | dict2items }}"
+  register: wireguard_conf
+  tags:
+    - config
+
+- name: deploy resolve dns change script if resolve_dns is defined
+  template: src=wireguard-resolve-dns.sh dest=/usr/local/wireguard-resolve-dns.sh
+  when: resolve_dns is defined
+  tags:
+    - config
