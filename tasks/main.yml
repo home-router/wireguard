@@ -1,14 +1,14 @@
 # If wireguard is running inside LXC container, we should setup kernel module loading
 # on host system instead of inside container.
 # Put host name inside "lxc_container" group in ansible inventory to mark this.
-- include_tasks: kernel-module.yml
+- import_tasks: kernel-modules.yml
   when: "'wireguard' in group_names and 'lxc_container' not in group_names"
 
 - meta: end_host
   when: "'pve_host' in group_names"
 
 - name: install package on system
-  include: "{{ router_os_distribution }}-pkg.yml"
+  include_tasks: "{{ router_os_distribution }}-pkg.yml"
 
 - name: generate wireguard config
   include_tasks: interface.yml
